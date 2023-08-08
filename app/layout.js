@@ -17,7 +17,10 @@ const pageDescription = "Blockchain-powered application for NFT ticketing";
 
 export default function RootLayout({ children }) {
   return (
-    <ThirdwebProvider activeChain="mumbai">
+    <ThirdwebProvider
+      activeChain="mumbai"
+      clientId="03ed6dc80620c178a1786170c8d5db39"
+    >
       <html lang="en">
         <head>
           {/* Meta title */}
