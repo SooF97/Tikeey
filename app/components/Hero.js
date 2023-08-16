@@ -26,7 +26,7 @@ const Hero = () => {
         >
           A Blockchain-Powered DApp Turning Event Tickets into Unique NFTs!
         </motion.p>
-        <Link href="/app" target="_blank">
+        <Link href="/application" target="_blank">
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
