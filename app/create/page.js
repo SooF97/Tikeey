@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { ethers } from "ethers";
 
 import { useAddress } from "@thirdweb-dev/react";
-import { create as ipfsHttpClient } from "ipfs-http-client";
+
+import FormData from "form-data";
+import axios from "axios";
 
 import Tikeey from "../Tikeey.json";
 
@@ -11,21 +13,14 @@ import Loading from "react-loading";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const projectId = "2MyNroGl6iLE7zAs4P4RNLzSAES";
-const projectSecret = "72901dfa73bf4a41fe20077f44f2aa0b";
-const auth =
-  "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
-
-const client = ipfsHttpClient({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-  headers: {
-    authorization: auth,
-  },
-});
-
 const page = () => {
+  const API_KEY = "0c61222bc1ea3c068ab4";
+  const API_SECRET =
+    "ad8d7ccf60595dc5af6149eac18b1f6556a64f61bcf82c27903d2761e3a472b2";
+
+  // the endpoint needed to upload the file
+  const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+
   const address = useAddress();
   // use states for inputs
   const [title, setTitle] = useState("");
@@ -96,23 +91,53 @@ const page = () => {
     setCity(enteredCity);
   }
 
-  // function to upload a file to IPFS
   async function imageToIpfs(e) {
+    e.preventDefault();
     setFileIsUploading(true);
-    const file = e.target.files[0];
     try {
-      const added = await client.add(file, {
-        progress: (prog) => console.log(`received: ${prog}`),
+      const file = e.target.files[0];
+      console.log("filename:", file.name);
+      // initialize the form data
+      const formData = new FormData();
+
+      // append the file form data to
+      formData.append("file", file);
+
+      const response = await axios.post(url, formData, {
+        maxContentLength: "Infinity",
+        headers: {
+          "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
+          pinata_api_key: API_KEY,
+          pinata_secret_api_key: API_SECRET,
+        },
       });
-      const url = `https://ipfs.io/ipfs/${added.path}`;
-      console.log(url);
-      setImageUrl(url);
+
+      console.log(`https://ipfs.io/ipfs/${response.data.IpfsHash}`);
+      setImageUrl(`https://ipfs.io/ipfs/${response.data.IpfsHash}`);
       toast("Uploaded successfully !", { type: "success" });
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
     setFileIsUploading(false);
   }
+
+  // function to upload a file to IPFS
+  // async function imageToIpfs(e) {
+  //   setFileIsUploading(true);
+  //   const file = e.target.files[0];
+  //   try {
+  //     const added = await client.add(file, {
+  //       progress: (prog) => console.log(`received: ${prog}`),
+  //     });
+  //     const url = `https://ipfs.io/ipfs/${added.path}`;
+  //     console.log(url);
+  //     setImageUrl(url);
+  //     toast("Uploaded successfully !", { type: "success" });
+  //   } catch (error) {
+  //     console.log("Error uploading file: ", error);
+  //   }
+  //   setFileIsUploading(false);
+  // }
 
   // function to upload a tickets folder to IPFS
   async function ticketsToIpfs(e) {
@@ -125,12 +150,26 @@ const page = () => {
       const uploadedCidsArray = [];
       var index = 0;
       for (const file of filesArray) {
-        const added = await client.add(file, {
-          progress: (prog) => console.log(`received: ${prog}`),
-        });
+        const formData = new FormData();
 
-        uploadedCidsArray[index] =
-          "https://ipfs.io/ipfs/" + `${added.cid.toString()}`;
+        // append the file form data to
+        formData.append("file", file);
+
+        const response = await axios.post(url, formData, {
+          maxContentLength: "Infinity",
+          headers: {
+            "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
+            pinata_api_key: API_KEY,
+            pinata_secret_api_key: API_SECRET,
+          },
+        });
+        // const added = await client.add(file, {
+        //   progress: (prog) => console.log(`received: ${prog}`),
+        // });
+
+        uploadedCidsArray[
+          index
+        ] = `https://ipfs.io/ipfs/${response.data.IpfsHash}/${file.name}`;
         index++;
       }
       console.log(uploadedCidsArray);
