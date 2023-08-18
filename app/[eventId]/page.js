@@ -31,7 +31,10 @@ const page = ({ params }) => {
 
   async function fetchEvents() {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.AlchemyProvider(
+        "maticmum",
+        "mrvXire3FFkkoWo_HFHsBmRpJDRh1snd"
+      );
       try {
         const contract = new ethers.Contract(
           Tikeey.address,

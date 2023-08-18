@@ -3,7 +3,7 @@ const Team = () => {
   const teamMembers = [
     {
       name: "Soufiane Masad",
-      role: "Project Manager",
+      role: "Blockchain Developer",
       bio: "The visionary leader behind the SaaS, driving innovation and growth.",
       socials: {
         twitter: "https://twitter.com/The_S00F",
@@ -12,7 +12,7 @@ const Team = () => {
       image: "/sfn_pdp.png",
     },
     {
-      name: "Abderrahim Ennouhi",
+      name: "Reda Alami",
       role: "Project Manager",
       bio: "The mastermind behind our soft solutions, ensuring seamless operations.",
       socials: {
@@ -22,8 +22,8 @@ const Team = () => {
       image: "/sfn_pdp.png",
     },
     {
-      name: "Hatim Belfaquir",
-      role: "Designer",
+      name: "Jalal Asfaj",
+      role: "SEO Expert",
       bio: "Hatim brings creativity to life, crafting captivating visuals and user experiences.",
       socials: {
         twitter: "https://twitter.com",
@@ -32,8 +32,8 @@ const Team = () => {
       image: "/sfn_pdp.png",
     },
     {
-      name: "Mohamad Berrouane",
-      role: "Web Developer",
+      name: "Mohamad Xxxxx",
+      role: "Graphic Designer",
       bio: "Mohamad is the driving force behind our technical success, maintenance and support.",
       socials: {
         twitter: "https://twitter.com",
