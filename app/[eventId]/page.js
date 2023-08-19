@@ -30,32 +30,31 @@ const page = ({ params }) => {
   }
 
   async function fetchEvents() {
-    if (window.ethereum) {
+    try {
       const provider = new ethers.providers.AlchemyProvider(
         "maticmum",
         "mrvXire3FFkkoWo_HFHsBmRpJDRh1snd"
       );
-      try {
-        const contract = new ethers.Contract(
-          Tikeey.address,
-          Tikeey.abi,
-          provider
-        );
-        const data = await contract.eventMapping(params.eventId);
-        console.log("data from smart contract", data);
-        setTitle(data[2]);
-        setDescription(data[3]);
-        setPrice(data[6].toString());
-        setImage(data[4]);
-        setTimeDate(data[9]);
-        setCity(data[10]);
-        setSupply(data[5].toString());
-        setTicketsSold(data[8].toString());
-        setLimit(data[7].toString());
-        setFetching(true);
-      } catch (error) {
-        console.log(error);
-      }
+
+      const contract = new ethers.Contract(
+        Tikeey.address,
+        Tikeey.abi,
+        provider
+      );
+      const data = await contract.eventMapping(params.eventId);
+      console.log("data from smart contract", data);
+      setTitle(data[2]);
+      setDescription(data[3]);
+      setPrice(data[6].toString());
+      setImage(data[4]);
+      setTimeDate(data[9]);
+      setCity(data[10]);
+      setSupply(data[5].toString());
+      setTicketsSold(data[8].toString());
+      setLimit(data[7].toString());
+      setFetching(true);
+    } catch (error) {
+      console.log(error);
     }
   }
 

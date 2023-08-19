@@ -4,27 +4,28 @@ import Tikeey from "../Tikeey.json";
 import { ethers } from "ethers";
 import Link from "next/link";
 
+import Loading from "react-loading";
+
 const page = () => {
   const [events, setEvents] = useState([]);
 
   async function fetchEvents() {
-    if (window.ethereum) {
+    try {
       const provider = new ethers.providers.AlchemyProvider(
         "maticmum",
         "mrvXire3FFkkoWo_HFHsBmRpJDRh1snd"
       );
-      try {
-        const contract = new ethers.Contract(
-          Tikeey.address,
-          Tikeey.abi,
-          provider
-        );
-        const data = await contract.fetchAvailableEvents();
-        console.log(data);
-        setEvents(data);
-      } catch (error) {
-        console.log(error);
-      }
+
+      const contract = new ethers.Contract(
+        Tikeey.address,
+        Tikeey.abi,
+        provider
+      );
+      const data = await contract.fetchAvailableEvents();
+      console.log(data);
+      setEvents(data);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -39,6 +40,11 @@ const page = () => {
   }, []);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 ">
+      {events.length === 0 && (
+        <div className=" m-auto w-full ">
+          <Loading type="spin" color="black" height={60} width={60} />
+        </div>
+      )}
       {events.map((event, index) => (
         <Link href={`/${event[0].toString()}`} key={index}>
           <div className="relative bg-white rounded-md shadow-sm overflow-hidden transform hover:scale-105 transition-all duration-300 cursor-pointer">
